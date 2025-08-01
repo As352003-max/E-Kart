@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 
 const ShoppingCart = ({ navigateTo }) => {
-  const { cartItems, removeFromCart, updateQuantity, getTotalItems, getTotalPrice, clearCart } = useContext(CartContext);
+  const { cartItems, removeFromCart, updateQuantity, getTotalItems, getTotalPrice } = useContext(CartContext);
 
   const [orders, setOrders] = useState([]);
   const bgRef = useRef(null);
@@ -19,20 +19,21 @@ const ShoppingCart = ({ navigateTo }) => {
     });
   }, []);
 
-  // ✅ Handle Checkout
+  // ✅ Handle Checkout → Redirect to Payment Page
   const handleCheckout = () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty!");
       return;
     }
+
     const newOrder = {
       orderId: `ORD-${Date.now()}`,
-      items: cartItems.map(item => ({ cart_id: item.id, item_id: item.id })),
+      items: cartItems,
+      totalAmount: getTotalPrice()
     };
-    setOrders(prev => [...prev, newOrder]);
-    clearCart();
-    alert("✅ Order placed successfully!");
-    navigateTo('products');
+
+    // 👉 Navigate to Payment Page with order details
+    navigateTo('payment', newOrder);
   };
 
   // ✅ Show Cart Items
@@ -101,7 +102,7 @@ const ShoppingCart = ({ navigateTo }) => {
             onClick={handleCheckout}
             className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-bold shadow-md"
           >
-            ✅ Checkout
+            ✅ Proceed to Payment
           </button>
         </div>
 
