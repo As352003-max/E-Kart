@@ -1,0 +1,32 @@
+import React, { createContext, useState } from 'react';
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
+
+  const login = (email) => {
+    setIsAuthenticated(true);
+    setUserEmail(email);
+  };
+
+  const signup = (email) => {
+    setIsAuthenticated(true);
+    setUserEmail(email);
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUserEmail(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ isAuthenticated, userEmail, login, signup, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+export default AuthProvider;
